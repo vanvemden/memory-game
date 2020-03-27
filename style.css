@@ -1,0 +1,170 @@
+body {
+    background-color: #000000;
+    color: silver;
+    margin: 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+
+a {
+    font-family: 'Open Sans', sans-serif;
+    color: gold;
+    text-decoration: none;
+}
+
+input:focus, select:focus, button:focus {
+    outline-color: gold;
+}
+
+.screen {
+    margin-left: auto; 
+    margin-right: auto
+}
+
+#title img {
+    position: absolute;
+    left: 50px;
+}
+
+#title h1, h2 {
+    text-align: center;
+    color: gold;
+}
+
+#title h1 {
+    font-size: 2.5em;
+    font-family: 'PT Sans Narrow', sans-serif;
+    margin-block-end: 0.1em;
+}
+
+#title h2 {
+    margin-block-start: 0.1em;
+    font-size: 1.1em;
+}
+
+div#players {
+    position: relative;
+    padding-top: 12px;
+}
+
+.player {
+    width: 14%;
+}
+ 
+.player, .prize {
+    color: gold;
+    padding: 4px;
+    font-size: 16px;
+    background-color: #111111;
+    height: 40px;
+    border: none;
+}
+
+.prize {
+    text-align: center;
+}
+
+#winner {
+    text-align: center;
+}
+
+.player.turn {
+    border: 2px solid green;
+}
+
+.prize {
+
+}
+
+#main ol {
+    display: table;
+    margin: 0 auto;
+}
+
+#setup h2 {
+    position: absolute;
+}
+
+#setup img {
+  width: 100%;
+  height: 80vh;
+  object-fit: cover; 
+}
+
+#game h2.turn {
+    color: green;
+}
+
+.score {
+    width: 14%;
+    padding: 4px 0px;
+    background-color: black;
+}
+
+.score span {
+    padding-left: 10px;
+}
+
+#board span {
+    display: inline-block;
+}
+
+.card {
+    position: relative;
+    z-index: 1;
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    background-color: silver;
+    display: inline-block;
+    border: 1px solid #dddddd;
+}
+
+.card img {
+    position: absolute;
+    z-index: 2;
+    visibility: hidden;
+}
+
+.card.open {
+    background-color: transparent;
+}
+
+.card.open img {
+    visibility: visible;;
+}
+
+.card span {
+    position: absolute;
+    z-index: 3;
+    bottom: -20px;
+    color: gold;
+}
+
+#start, #quit, .spacer {
+    width: 19%;
+    font-size: 16px;
+    height: 40px;
+}
+
+#start {
+    background-color: green;
+    border: none;
+}
+
+#quit {
+    background-color: red;
+    border: none;
+}
+
+#sets  {
+    width: 19%;
+    font-size: 16px;
+    height: 40px;
+    background-color: gold
+}
+
+#footer {
+    margin-top: 40px;
+    text-align: center;
+}
