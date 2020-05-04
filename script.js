@@ -190,7 +190,7 @@ window.addEventListener("load", function() {
     }
 
     function sortScores(players) {
-        return players.sort((a, b) => b.points - a.points || b.clicks - a.clicks); 
+        return players.sort((a, b) => b.points - a.points || a.clicks - b.clicks); 
     }
     
     function nextPlayer() {
