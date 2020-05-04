@@ -1,67 +1,65 @@
 <html>
     <head>
-        <title>Train the Brain | Memory Game</title>
+        <title>Brain Train | a memory game</title>
         <link href="style.css" rel="stylesheet" type="text/css" media="all">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans+Narrow&display=swap" rel="stylesheet">    </head>
     <body>
         <div id="title" class="screen">
-            <img src="funny-albert-einstein.png" width="100px">
-            <h1>Memory Game</h1>
-            <h2>To train and gain brain.</h2>
+            <img src="img/funny-albert-einstein.png" width="100px">
+            <h1>Train the Brain</h1>
+            <h2>with this memory game</h2>
             <div id="players">
                 <select id="sets">
                     <option value="12">24 cards</option>
                     <option value="18" default>36 cards</option>
                     <option value="24">48 cards</option>
                 </select>
-                <input id="player-1" type="text" title="Name" class="player" placeholder="Brain one">
-                <input id="player-2" type="text" title="Name" class="player" placeholder="Brain two">
-                <input id="player-3" type="text" title="Name" class="player" placeholder="Brain three">
-                <input id="player-4" type="text" title="Name" class="player" placeholder="Brain four">
-                <button id="start">Start</button>
+                <input id="player-1" type="text" title="Name" class="player" placeholder="Brain 1">
+                <input id="player-2" type="text" title="Name" class="player" placeholder="Brain 2">
+                <input id="player-3" type="text" title="Name" class="player" placeholder="Brain 3">
+                <input id="player-4" type="text" title="Name" class="player" placeholder="Brain 4">
+                <button id="start">Play</button>
                 <button id="quit" hidden>Quit</button>
             </div>
         </div>
 
         <div id="main" class="screen">
-            <div id="winner">
-                <h2>Winner gets</h2>
-                <input id="prize" type="text" title="Prize" class="prize" placeholder="bragging rights">
-            </div>
-            <h2>Here's how to play:</h2>
+            <h2>How to play</h2>
             <ol>
-                <li>Select a number of cards. More cards builds more brainpower.</li>
-                <li>Enter at least one brain's name. Up to four brains can play.</li>
-                <li>Winner gets bragging rights, or enter another prize.</li>
-                <li>Click the <em>Start</em> button</li>
-                <li>Then I'll build, mix, and lay the custom cards.</li>
+                <li>Select a number of cards; more cards builds more brainpower.</li>
+                <li>Enter a name for brain 1. Up to 4 brains can play.</li>
+                <li>Click the <em>Play</em> button, and wait for the cards.</li>
                 <li>First brain flips 2 cards. If they match; go again.</li>
-                <li>If cards don't match, they will turn back over in 3 seconds.</li>
-                <li>In case of multibrain game, next brain flips 2 cards.</li>
+                <li>If cards do not match, they'll turn back over after 3 seconds.</li>
+                <li>In case of multibrain game, next player flips 2 cards.</li>
                 <li>Game is over when all card have been matched.</li>
-                <li>Brain with most matches in least clicks wins.</li>
+                <li>The brain with most matches in least clicks wins!</li>
             </ol>
         </div>
 
         <div id="setup" class="screen" hidden>
             <h2>One moment please; preparing the game...</h2>
-            <img src="kid_waiting.gif">
+            <img src="img/kid-waiting.gif">
         </div>
 
         <div id="game" class="screen" hidden>
             <div id="board">
                 <span class="spacer">&nbsp;</span>
                 <span id="stats-player-1" class="score">
-                    <span class="clicks">0</span>&nbsp;clicks <span class="points">0</span>&nbsp;points
+                    <span class="points">0</span>&nbsp;points<br>
+                    <span class="clicks">0</span>&nbsp;clicks
                 </span>
                 <span id="stats-player-2" class="score">
-                    <span class="clicks">0</span>&nbsp;clicks <span class="points">0</span>&nbsp;points
+                    <span class="points">0</span>&nbsp;points<br>
+                    <span class="clicks">0</span>&nbsp;clicks
                 </span>
                 <span id="stats-player-3" class="score">
-                    <span class="clicks">0</span>&nbsp;clicks <span class="points">0</span>&nbsp;points
+                    <span class="points">0</span>&nbsp;points<br>
+                    <span class="clicks">0</span>&nbsp;clicks
                 </span>
                 <span id="stats-player-4" class="score">
-                    <span class="clicks">0</span>&nbsp;clicks <span class="points">0</span>&nbsp;points
+                    <span class="points">0</span>&nbsp;points<br>
+                    <span class="clicks">0</span>&nbsp;clicks
                 </span>
                 <span class="spacer">&nbsp;</span>
             </div>
@@ -70,14 +68,17 @@
             <div id="footer">Images by <a href="https://picsum.photos/" target="_blank">Lorem Picsum</a></div>
         </div>
 
-        <div id="winners" class="screen" hidden>
-            <h2>Winners</h2>
-            <div id="list"></div>
+        <div id="scores" class="screen" hidden>
+            <h2>Game Over</h2>
+            <h3>Score:</h3>
+            <ol id="last"></ol>
+            <h3>Highest Scores:</h3>
+            <ol id="past"></ol>
         </div>
 
         <div id="error" class="screen" hidden>
-            <h2>Sorry, Error</h2>
-            <h3>Our applogies</h3>
+            <h2>OUT OF ORDER</h2>
+            <h2>Sorry, game is temporarily unavailable :(</h2>
             <p class="message"></p>
         </div>
 

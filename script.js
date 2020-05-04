@@ -1,79 +1,4 @@
-/*
-3. Memory Game
-For this assignment, you’ll be building a memory game in the 
-browser using HTML, CSS, and JavaScript. Your goal is to build
-a card-based memory game.
-
-Players will be shown a collection of cards, face down, and can
-click on a card to reveal what’s underneath. After clicking on 
-two cards, the game should check to see whether they match. If 
-they do, they will remain facing up. If not, the cards should 
-remain displayed to the player for a couple of seconds, and then 
-flip back down. The goal of the game is to match up pairs of 
-cards in as few clicks as possible.
-
-Be sure to style your game! It should be functional but also look nice.
-
-Requirements
-- User should be able to start a new game.
-- Clicking a card should reveal what’s underneath it. 
-- The game should keep track and display the number of times 
-  cards have been turned over.
-- Users should only be able to see at most two cards at a time.
-- Clicking on two matching cards should be a “match” — those 
-  cards should stay face up. (Make sure this works only if you 
-  click on two different cards — clicking the same card twice 
-  shouldn’t count as a match!)
-- When clicking two cards that are not a match, they should 
-  stay turned over for at least 1 second before they flip over 
-  again
-
-  (Bonus) Store the lowest-scoring game in local storage, so that 
-  players can see a record of the best game played.
-*/
-
-// How to play memory game
-// 1. Mix up the cards.
-// 2. Lay them in rows, face down.
-// 3. Turn over any two cards
-// 4. If the two cards match, keep them.
-// 5. If they don't match, turn them back over.
-// 6. Remember what was on each card and where it was.
-// 7. Watch and remember during the other player's turn.
-// 8. The game is over when all the cards have been matched.
-
-// Game features
-// x Single or multiple player game
-// x Easy, Normal, or Hard game level (12, 18, 24 sets)
-// x Count number of matched pairs per player
-// - Count number of turns, also for single player
-// x Count number of flips per card.
-// x Random new pictures in every game
-// - Option for Trump card; loos
-// - Option for Obama card; click tree for this turn
-// - Select theme for images 
-
-// Process
-// Select number of players (default 1)
-// Enter player name(s)
-// Select game level (default Normal/18)
-// Click New Game button
-// Cards are layed
-// Player 1 pickes two cards
-// If cards match
-//  cards remain turned, player gets point
-//  if all cards turned, 
-//      game over!
-//  else
-//      player picks again
-// else
-//  carrs are turned back, player looses turn
-// If multiplayer
-//  next player gets turn
-// else 
-//  player goes again
-
-window.addEventListener("load", function(){
+window.addEventListener("load", function() {
 
     let imageGeneratorUrl = "https://picsum.photos/100/100",
         listOfPlayers = [],
@@ -85,26 +10,22 @@ window.addEventListener("load", function(){
     document.getElementById("quit").addEventListener("click", confirmQuitGame);
 
     function startGame() {
-        let setsSelectlist =  document.getElementById("sets")
+        let setsSelectlist =  getSetsInputElement();
         let numberOfSets = setsSelectlist.value;
-        
         listOfPlayers = getPlayers();
         if(listOfPlayers.length === 0) {
-            alert("See step 2; enter at least one name, brain.");
+            alert("Please enter a name in Brain 1.");
             return;
         }
-
         setGameMode(true);
         switchScreens("main", "setup");
-
+        switchScreens("scores", "setup");
         getImages(numberOfSets).then( function(images) {
             let imageElements = getImageElements(images);
             let cardSet = getCardSet(imageElements);
-
             layCardSet(cardSet);
             switchScreens("setup", "game");
             playerGetsTurn(listOfPlayers[currentPlayer]);
-
         }).catch( function(error) {
             console.log("Error laying the cards.");
             switchScreens("setup", "error");
@@ -114,15 +35,28 @@ window.addEventListener("load", function(){
     }
 
     function stopGame(keepScore = true) {
+        resetGame();
         switchScreens("game", "main");
         setGameMode(false);
+    }
+
+    function resetGame() {
+        let cards = getCardsContainerElement();
+        cards.innerHTML = "";
+        for (let i = 0; i < listOfPlayers.length; i++) {
+            let points = getPointsElement(listOfPlayers[i])
+            let clicks = getClicksElement(listOfPlayers[i]);
+            points.innerText = 0;
+            clicks.innerText = 0;
+        }
+        listOfPlayers = [];
+        currentPlayer = 0;
+        openCards = [];
     }
 
     function confirmQuitGame() {
         if(confirm("Are you sure you want to quit the game? Select OK to quit, or Cancel to continue the game.")) {
             stopGame(false);
-        } else {
-
         }
     }
 
@@ -136,7 +70,6 @@ window.addEventListener("load", function(){
     function cardClicked(event) {
         let card = event.target;
         let player = listOfPlayers[currentPlayer];
-
         if (openCards.length === 0) {
             // Handle first card
             showCard(card);
@@ -144,28 +77,34 @@ window.addEventListener("load", function(){
         } else if (openCards.length === 1) {
             // Handle second card
             if (openCards[0] === card) {
-                alert("Brainfart! Same card clicked again.");
+                alert("Oops, same card clicked again.");
                 return;
             } else {
+                postScores(); // TESTING
                 showCard(card);
                 updatePlayerClicks(player);
                 if(openCardsMatch()) {
                     updatePlayerPoints(player);
-                    freezeCards();
+                    freezeOpenCards();
                     if(isGameOver()) {
+                        postScores();
+                        switchScreens("game", "scores")
+                        resetGame()
                         setGameMode(false);
                     }    
                 } else {
-                    hideCards();
+                    hideOpenCards();
                 }
             }
         }
     }
 
     function setGameMode(gameOn = true){
+        let setsList = document.getElementById("sets");
         let inputFields = document.getElementsByClassName("player");
         let startButton = document.getElementById("start");
         let quitButton = document.getElementById("quit");
+        setsList.disabled = gameOn;
         for(let i = 0; i < inputFields.length; i++ ) {
             inputFields[i].disabled = gameOn;
         }
@@ -174,17 +113,22 @@ window.addEventListener("load", function(){
     }
 
     function isGameOver() {
-        if
+        let cardsOpen = getOpenCardElements();
+        let setsInput = getSetsInputElement();
+        if (cardsOpen.length === parseInt(setsInput.value) * 2 ) {
+            return true;
+        }
+        return false;
     }
 
     function updatePlayerClicks(player) {
-        let clicksElement = document.querySelector("#stats-" + player.id + " span.clicks");
+        let clicksElement = getClicksElement(player);
         player.clicks++;
         clicksElement.innerText = player.clicks;
     }
 
     function updatePlayerPoints(player) {
-        let pointsElement = document.querySelector("#stats-" + player.id + " span.points");
+        let pointsElement = getPointsElement(player);
         player.points++;
         pointsElement.innerText = player.points;
     }
@@ -198,13 +142,11 @@ window.addEventListener("load", function(){
                     name: inputElements[i].value,
                     id: inputElements[i].id, 
                     clicks: 0,
-                    points: 0,
-                    games: 0
+                    points: 0
                 }
                 players.push(player);
             }
         }
-        console.log(players);
         return players;
     }
 
@@ -227,6 +169,31 @@ window.addEventListener("load", function(){
         title.classList.add("score");
     }
 
+    function postScores() {
+        let gameRanking = sortScores(listOfPlayers);
+        let gameScoreList = getGameScoreElement();
+        addItemsToList(gameRanking, gameScoreList);
+        let top10Ranking = loadTop10Ranking();
+        let combinedRanking = top10Ranking.concat(gameRanking);
+        top10Ranking = sortScores(combinedRanking).slice(0,10);
+        saveTop10Ranking(top10Ranking);
+        let top10ScoreList = getTop10ScoreElement();
+        addItemsToList(top10Ranking, top10ScoreList);
+    }
+
+    function addItemsToList(items, list) {
+        list.innerHTML = "";
+        for (let i = 0; i < items.length; i++) {
+            let li = document.createElement("li");
+            li.innerText = `${items[i].name}, ${items[i].points} points in ${items[i].clicks} clicks`;
+            list.appendChild(li);
+        }
+    }
+
+    function sortScores(players) {
+        return players.sort((a, b) => b.points - a.points || b.clicks - a.clicks); 
+    }
+    
     function nextPlayer() {
         playerLosesTurn(listOfPlayers[currentPlayer]);
         if(currentPlayer < listOfPlayers.length - 1) {
@@ -243,14 +210,14 @@ window.addEventListener("load", function(){
         return card1.src === card2.src;
     }
 
-    function freezeCards() {
+    function freezeOpenCards() {
         openCards.forEach(function(card) {
             card.removeEventListener("click", cardClicked);
         });
         openCards = [];
     }
 
-    function hideCards() {
+    function hideOpenCards() {
         let timer = setTimeout(function() {
             openCards.forEach(function(card) {
                 card.classList.toggle("open");
@@ -269,10 +236,9 @@ window.addEventListener("load", function(){
     }
 
     function layCardSet(cardSet) {
-        let cards = document.getElementById("cards");
+        let cards = getCardsContainerElement();
         cardSet.forEach(card => {
             card.style.transform = "rotate(" + ((Math.random() * 4) - (Math.random() * 4))  + "deg)";
-            console.log(card);
             cards.appendChild(card);
         });
     }
@@ -342,4 +308,41 @@ window.addEventListener("load", function(){
         });
     }
 
+    function saveTop10Ranking(players) {
+        let str = JSON.stringify(players);
+        localStorage.setItem("memory-game-top10", str);
+     }
+  
+     function loadTop10Ranking() {
+        let str = localStorage.getItem("memory-game-top10");
+        return JSON.parse(str) || [];
+     }
+     
+    function getCardsContainerElement() {
+        return document.getElementById("cards");
+    }
+
+    function getOpenCardElements() {
+        return document.querySelectorAll(".card.open");
+    }
+
+    function getClicksElement(player) {
+        return  document.querySelector("#stats-" + player.id + " span.clicks")
+    }
+
+    function getPointsElement(player) {
+        return document.querySelector("#stats-" + player.id + " span.points");
+    }
+
+    function getSetsInputElement() {
+        return document.getElementById("sets");
+    }
+
+    function getGameScoreElement() {
+        return document.getElementById("last");
+    }
+
+    function getTop10ScoreElement() {
+        return document.getElementById("past");
+    }
 })

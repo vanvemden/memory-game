@@ -12,6 +12,11 @@ a {
     text-decoration: none;
 }
 
+ol {
+    display: table;
+    margin: 0 auto;
+}
+
 input:focus, select:focus, button:focus {
     outline-color: gold;
 }
@@ -42,6 +47,10 @@ input:focus, select:focus, button:focus {
     font-size: 1.1em;
 }
 
+h3 {
+    text-align: center;
+}
+
 div#players {
     position: relative;
     padding-top: 12px;
@@ -64,25 +73,14 @@ div#players {
     text-align: center;
 }
 
-#winner {
-    text-align: center;
-}
-
 .player.turn {
     border: 2px solid green;
 }
 
-.prize {
-
-}
-
-#main ol {
-    display: table;
-    margin: 0 auto;
-}
-
 #setup h2 {
     position: absolute;
+    left: 0;
+    right: 0;
 }
 
 #setup img {
@@ -115,9 +113,9 @@ div#players {
     width: 100px;
     height: 100px;
     margin: 20px;
-    background-color: silver;
+    background-color:gold;
     display: inline-block;
-    border: 1px solid #dddddd;
+    border: 3px solid white;
 }
 
 .card img {
@@ -137,14 +135,15 @@ div#players {
 .card span {
     position: absolute;
     z-index: 3;
-    bottom: -20px;
-    color: gold;
+    bottom: -23px;
+    color: silver;
 }
 
 #start, #quit, .spacer {
     width: 19%;
     font-size: 16px;
     height: 40px;
+    border-radius: 5px;
 }
 
 #start {
