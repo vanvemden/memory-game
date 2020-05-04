@@ -80,7 +80,6 @@ window.addEventListener("load", function() {
                 alert("Oops, same card clicked again.");
                 return;
             } else {
-                postScores(); // TESTING
                 showCard(card);
                 updatePlayerClicks(player);
                 if(openCardsMatch()) {
